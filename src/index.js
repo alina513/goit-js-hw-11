@@ -12,7 +12,7 @@ const list = document.querySelector(".gallery");
 const btn = document.querySelector(".load-more");
 const alert = document.querySelector(".alert")
 
-
+let page = 1;
 let limit = 40;
 let isAlertVisible = false;
 const totalPages = 500 / limit;
@@ -24,11 +24,11 @@ form.addEventListener("submit", onSubmit);
 function onSubmit(event) {
     event.preventDefault();
     btn.classList.add("is-hidden")
-    let page = 1;
+    // let page = 1;
     list.innerHTML = "";
-    let element = event.currentTarget.elements.searchQuery.value;
+    let element = event.currentTarget.elements.searchQuery.value.trim();
     
-    if (element === "" || element === " ") {return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")}
+    if (element === "") {return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")}
    
     if (page > totalPages) {
         return alertPop();
@@ -37,6 +37,7 @@ function onSubmit(event) {
     .then((result) => {if (result.length === 0) {return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")}
     page += 1;   
      getMarkup(result);
+     lightbox.refresh();
      btn.classList.remove("is-hidden");
      btn.addEventListener("click", onClick);
        })
@@ -46,27 +47,27 @@ function onSubmit(event) {
 
 
 
-//    function fetchItem(q) {
-//     return axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
-//     .then(resp => {
-//         console.log(resp);
-//          return resp.data.hits
-//       })
-// }
-
-
-async function fetchItem(q) {
-  let resp = await axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
-       return resp.data.hits
-    }
+   function fetchItem(q) {
+    return axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
+    .then(resp => {
+        console.log(resp);
+         return resp.data.hits
+      })
 }
+
+
+// async function fetchItem(q) {
+//   let resp = await axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
+//        return resp.data.hits
+//     }
+// }
 
 
 
 function getMarkup (arr) {
  const markup = arr.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
     return  `<div class="photo-card">
-    <a class="gallery__link" href="${largeImageURL}">
+    <a href="${largeImageURL}" class="gallery__link">
     <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
     </a>
     <div class="info">
@@ -95,7 +96,7 @@ function alertPop() {
       return;
     }
     isAlertVisible = true;
-    alert.classList.add("is-visible");
+   alert.classList.add("is-visible");
     btn.classList.add("is-hidden")
     setTimeout(() => {
       alert.classList.remove("is-visible");
@@ -104,6 +105,7 @@ function alertPop() {
   }
 
 function onClick(event) {
+  // let page = 1;
     if (page > totalPages) {
         return alertPop();
       }
@@ -111,6 +113,7 @@ function onClick(event) {
     .then((result) => {if (result.length === 0) {return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")}
     page += 1;   
      getMarkup(result);
+     lightbox.refresh();
        })
     .catch((error) => {console.log(error);
    });
