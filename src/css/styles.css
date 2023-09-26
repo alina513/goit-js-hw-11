@@ -3,11 +3,14 @@
     flex-wrap: wrap;
     gap: 20px;
     margin-top: 50px;
+    padding-left: 80px;
+    
 
 }
 
 body {
     font-size: 12px;
+    
 }
 
 img {
@@ -61,4 +64,10 @@ img {
     border-radius: 50;
     font-size: 20px;
     
+  }
+
+  .load-more {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
   }
