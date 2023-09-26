@@ -46,13 +46,22 @@ function onSubmit(event) {
 
 
 
- function fetchItem(q) {
-    return axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
-    .then(resp => {
-        console.log(resp);
-         return resp.data.hits
-      })
+//    function fetchItem(q) {
+//     return axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
+//     .then(resp => {
+//         console.log(resp);
+//          return resp.data.hits
+//       })
+// }
+
+
+async function fetchItem(q) {
+  let resp = await axios.get(`https://pixabay.com/api/?key=39636776-fbfac41511b7d2258638a469a&image_type=photo&q=${q}&orientation=horizontal&safesearch=true&per_page=${limit}&page=${page}`)
+       return resp.data.hits
+    }
 }
+
+
 
 function getMarkup (arr) {
  const markup = arr.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
